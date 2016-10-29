@@ -1,7 +1,7 @@
 <cover-image-editor>
   <div class="container">
-    <img src="http://www.placehold.it/200x200" />
-    <table onclick={insert}>
+    <img class="preview" src="http://www.placehold.it/200x200" />
+    <table class="grid" onclick={insert}>
       <tr>
         <td data-direction="NorthWest" onclick={handler}></td>
         <td data-direction="North" onclick={handler}></td>
@@ -20,8 +20,10 @@
     </table>
     <span id="indicator">X</span>
   </div>
-
-  <h1>{ direction }</h1>
+    <h1>{ direction }</h1>
+    <virtual each={partnerCrops}>
+      <img height="200px" src="http://node-image-pipeline.us-west-1.elasticbeanstalk.com/crop/{id}/{direction}/{width}/{height}" />
+    </virtual>
 
   <style>
     .container {
@@ -30,13 +32,13 @@
       height: 200px;
     }
 
-    img {
+    .preview {
       position: absolute;
       width: 200px;
       height: 200px;
     }
 
-    table {
+    .grid {
       position: absolute;
       width: 200px;
       height: 200px;
@@ -56,14 +58,20 @@
   <script>
     const self = this;
     this.direction = 'Center';
+    this.id = 'G9F43EV646AG1CBP';
+    this.partnerCrops = [
+      {width: 500, height: 500},
+      {width: 400, height: 500},
+      {width: 500, height: 700}
+    ]
 
     this.on('mount', () => {
       self.indicator = document.getElementById('indicator');
     });
 
     insert (event) {
-      self.indicator.style.top = event.clientY - 5;
-      self.indicator.style.left = event.clientX - 5;
+      self.indicator.style.top = event.clientY;
+      self.indicator.style.left = event.clientX;
     }
 
     handler (event) {
