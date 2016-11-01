@@ -1,11 +1,14 @@
-# riot-quickstart
-Quickstart for projects built with riot and gulp
+# cover-image-editor
+Mock riot app for cover-image-editor
 
 ## Install
 ```
-git clone https://github.com/dskrenta/riot-quickstart
-cd riot-quickstart && npm install
+git clone https://github.com/dskrenta/cover-image-editor
+cd cover-image-editor && npm install
 ```
 
-## Run
-`npm start`
+## Run & Build
+```
+npm run build
+npm start
+```
