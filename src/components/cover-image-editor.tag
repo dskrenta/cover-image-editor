@@ -20,6 +20,7 @@
     </table>
     <span id="indicator">X</span>
   </div>
+    <input type="range" min="100" max="500" onchange={magnify}></input>
     <h1>{ direction }</h1>
     <virtual each={partnerCrops}>
       <img height="200px" src="http://node-image-pipeline.us-west-1.elasticbeanstalk.com/crop/{id}/{direction}/{width}/{height}" />
@@ -77,6 +78,10 @@
     handler (event) {
       self.direction = event.target.dataset.direction;
       self.update();
+    }
+
+    magnify (event) {
+      console.log(event.target.value / 100);
     }
   </script>
 </cover-image-editor>
