@@ -20,10 +20,11 @@
     </table>
     <span id="indicator">X</span>
   </div>
-    <input type="range" min="100" max="500" onchange={magnify}></input>
-    <h1>{ direction }</h1>
+    <input type="range" min="100" max="300" value="100" onchange={zoom}></input>
+    <h1>{direction}</h1>
+    <h1>{magnify}</h1>
     <virtual each={partnerCrops}>
-      <img height="200px" src="http://node-image-pipeline.us-west-1.elasticbeanstalk.com/crop/{id}/{direction}/{width}/{height}" />
+      <img height="200px" src="http://node-image-pipeline.us-west-1.elasticbeanstalk.com/crop/{id}/{direction}/{width}/{height}/{magnify}" />
     </virtual>
 
   <style>
@@ -60,6 +61,7 @@
     const self = this;
     this.direction = 'Center';
     this.id = 'G9F43EV646AG1CBP';
+    this.magnify = 1;
     this.partnerCrops = [
       {width: 500, height: 500},
       {width: 400, height: 500},
@@ -80,8 +82,10 @@
       self.update();
     }
 
-    magnify (event) {
-      console.log(event.target.value / 100);
+    zoom (event) {
+      self.magnify = event.target.value / 100;
+      console.log(self.magnify);
+      self.update();
     }
   </script>
 </cover-image-editor>
