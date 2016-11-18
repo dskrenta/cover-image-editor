@@ -84,7 +84,6 @@
 
     zoom (event) {
       self.magnify = event.target.value / 100;
-      console.log(self.magnify);
       self.update();
     }
   </script>
