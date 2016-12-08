@@ -66,7 +66,7 @@
       {width: 500, height: 500},
       {width: 400, height: 500},
       {width: 500, height: 700}
-    ]
+    ];
 
     this.on('mount', () => {
       self.indicator = document.getElementById('indicator');
