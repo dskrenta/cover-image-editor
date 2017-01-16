@@ -1,4 +1,4 @@
-<cover-image-editor>
+<crop-tool>
   <div class="container">
     <img id="image" class="preview" onclick={insert} onload={dimensions} src="http://proxy.topixcdn.com/ipicimg/{id}-rszw400" />
     <span id="indicator">X</span>
@@ -44,9 +44,8 @@
       self.dimensions = {
         width: event.path[0].naturalWidth,
         height: event.path[0].naturalHeight,
-        aspectRatio: this.width / this.height
       };
-      // self.aspectRatio = dimensions.width / dimensions.height;
+      self.dimensions.aspectRatio = self.dimensions.width / self.dimensions.height;
     }
 
     /*
@@ -87,18 +86,31 @@
 
     function calculateValues () {
       for (let i = 0; i < self.partnerCrops.length; i++) {
-        if (self.aspectRatio > 1) {
+        console.log(self.dimensions.aspectRatio);
+        if (self.dimensions.aspectRatio > 1) {
           // resize by height
-          let resizeHeight = self.partnerCrops[i].height;
-          let resizeWidth = (self.dimensions.width / self.dimensions.height) * resizeHeight;
+          let rHeight = self.partnerCrops[i].height;
+          let rWidth = (self.dimensions.width / self.dimensions.height) * rHeight;
           let cWidth = self.partnerCrops[i].width;
-          let cHeight = resizeHeight;
-          let cY = resizeHeight;
-          let cX = // ?
+          let cHeight = rHeight;
+          let gX = (self.gravity.x / self.dimensions.width) * rWidth;
+          let gY = (self.gravity.y / self.dimensions.height) * rHeight;
+          let cY = cHeight;
+          let cX = gX - (0.5 * cWidth);
+          console.log(`rHeight: ${rHeight}, rWidth: ${rWidth}, cWidth: ${cWidth}, cHeight: ${cHeight}, gY: ${gY}, gX: ${gX}, cY: ${cY}, cX: ${cX}`);
         } else {
           // resize by width
+          let rWidth = self.partnerCrops[i].width;
+          let rHeight = rWidth / (self.dimensions.width / self.dimensions.height);
+          let cWidth = rWidth;
+          let cHeight = self.partnerCrops[i].height;
+          let gX = (self.gravity.x / self.dimensions.width) * rWidth;
+          let gY = (self.gravity.y / self.dimensions.height) * rHeight;
+          let cY = gY - (0.5 * cHeight);
+          let cX = cWidth;
+          console.log(`rHeight: ${rHeight}, rWidth: ${rWidth}, cWidth: ${cWidth}, cHeight: ${cHeight}, gY: ${gY}, gX: ${gX}, cY: ${cY}, cX: ${cX}`);
         }
       }
     }
   </script>
-</cover-image-editor>
+</crop-tool>
