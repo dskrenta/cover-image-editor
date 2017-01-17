@@ -1,6 +1,6 @@
 <crop-tool>
   <div class="container">
-    <img id="image" class="preview" onclick={insert} onload={dimensions} src="http://proxy.topixcdn.com/ipicimg/{id}-rszw400" />
+    <img id="image" class="preview" onclick={insert} onload={dimensions} src="http://proxy.topixcdn.com/ipicimg/{id}" />
     <span id="indicator">X</span>
   </div>
   <virtual each={partnerCrops}>
@@ -14,6 +14,7 @@
 
     .preview {
       position: absolute;
+      width: 400px;
     }
 
     span {
@@ -29,7 +30,7 @@
 
   <script>
     const self = this;
-    this.id = 'G9F43EV646AG1CBP';
+    this.id = 'B5772M9IEU0AA67R';
     this.partnerCrops = [
       {width: 500, height: 500},
       {width: 400, height: 500},
@@ -46,6 +47,7 @@
         height: event.path[0].naturalHeight,
       };
       self.dimensions.aspectRatio = self.dimensions.width / self.dimensions.height;
+      console.log(self.dimensions.width, self.dimensions.height);
     }
 
     /*
@@ -96,8 +98,9 @@
           let gX = (self.gravity.x / self.dimensions.width) * rWidth;
           let gY = (self.gravity.y / self.dimensions.height) * rHeight;
           let cY = cHeight;
-          let cX = gX - (0.5 * cWidth);
+          let cX = Math.floor(gX - (0.5 * cWidth));
           console.log(`rHeight: ${rHeight}, rWidth: ${rWidth}, cWidth: ${cWidth}, cHeight: ${cHeight}, gY: ${gY}, gX: ${gX}, cY: ${cY}, cX: ${cX}`);
+          console.log(`http:\/\/proxy.topixcdn.com/ipicimg/${self.id}-rszh${rHeight}-cp${cX}x${cY}x${cWidth}x${cHeight}`);
         } else {
           // resize by width
           let rWidth = self.partnerCrops[i].width;
@@ -106,9 +109,10 @@
           let cHeight = self.partnerCrops[i].height;
           let gX = (self.gravity.x / self.dimensions.width) * rWidth;
           let gY = (self.gravity.y / self.dimensions.height) * rHeight;
-          let cY = gY - (0.5 * cHeight);
+          let cY = Math.floor(gY - (0.5 * cHeight));
           let cX = cWidth;
           console.log(`rHeight: ${rHeight}, rWidth: ${rWidth}, cWidth: ${cWidth}, cHeight: ${cHeight}, gY: ${gY}, gX: ${gX}, cY: ${cY}, cX: ${cX}`);
+          console.log(`http:\/\/proxy.topixcdn.com/ipicimg/${self.id}-rszw${rWidth}-cp${cX}x${cY}x${cWidth}x${cHeight}`);
         }
       }
     }
