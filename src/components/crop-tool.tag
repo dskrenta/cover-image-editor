@@ -56,12 +56,40 @@
     }
 
     insert (event) {
-      self.indicator.style.top = event.clientY;
-      self.indicator.style.left = event.clientX;
-      self.gravity = {x: event.clientX, y: event.clientY, scale: 1};
+      let x = event.clientX;
+      let y = event.clientY;
+      self.indicator.style.left = x;
+      self.indicator.style.top = y;
+      self.gravity = {
+        x: (x / self.dimensions.pWidth) * self.dimensions.width,
+        y: (y / self.dimensions.pHeight) * self.dimensions.height,
+        scale: 1
+      };
       calculateValues();
     }
 
+    function calculateValues () {
+      for (let i = 0; i < self.partnerCrops.length; i++) {
+        let aspectRatio = self.partnerCrops[i].width / self.partnerCrops[i].height;
+        let cWidth = 0;
+        let cHeight = 0;
+        if (self.dimensions.aspectRatio > 1) {
+          // resize by height
+          cHeight = self.dimensions.height;
+          cWidth = aspectRatio * cHeight;
+        } else {
+          // resize by width
+          cWidth = self.dimensions.width;
+          cHeight = cWidth / aspectRatio;
+        }
+        let cX =  self.gravity.x - (0.5 * cWidth);
+        let cY = self.gravity.y + (0.5 * cHeight);
+        console.log(`cX: ${cX}, cY: ${cY}, cWidth: ${cWidth}, cHeight: ${cHeight}`);
+        console.log(`http:\/\/proxy.topixcdn.com/ipicimg/${self.id}-cp${cX}x${cY}x${cWidth}x${cHeight}-fill${self.partnerCrops[i].width}x${self.partnerCrops[i].height}x`);
+      }
+    }
+
+    /*
     function calculateValues () {
       for (let i = 0; i < self.partnerCrops.length; i++) {
         let aspectRatio = self.partnerCrops[i].width / self.partnerCrops[i].height;
@@ -70,9 +98,9 @@
         if (self.dimensions.aspectRatio > 1) {
           // resize by height
           let cHeight = self.dimensions.height * self.gravity.scale;
-          let cWidth = aspectRatio * cHeight * self.gravity.scale;
-          let gX = (self.gravity.x / self.dimensions.pWidth) * aspectRatio * cHeight;
-          let gY = (self.gravity.y / self.dimensions.pHeight) * aspectRatio * cWidth;
+          let cWidth = self.dimensions.aspectRatio * cHeight * self.gravity.scale;
+          let gX = (self.gravity.x / self.dimensions.pWidth) * self.dimensions.aspectRatio * cHeight;
+          let gY = (self.gravity.y / self.dimensions.pHeight) * self.dimensions.aspectRatio * cWidth;
           let cX =  gX - (0.5 * cWidth);
           let cY = gY + (0.5 * cHeight);
           console.log(`gX: ${gX}, gY: ${gY}, cX: ${cX}, cY: ${cY}, cWidth: ${cWidth}, cHeight: ${cHeight}`);
@@ -80,9 +108,9 @@
         } else {
           // resize by width
           let cWidth = self.dimensions.width * self.gravity.scale;
-          let cHeight = (cWidth / aspectRatio) * self.gravity.scale;
-          let gX = (self.gravity.x / self.dimensions.pWidth) * aspectRatio * cHeight;
-          let gY = (self.gravity.y / self.dimensions.pHeight) * aspectRatio * cWidth;
+          let cHeight = (cWidth / self.dimensions.aspectRatio) * self.gravity.scale;
+          let gX = (self.gravity.x / self.dimensions.pWidth) * self.dimensions.aspectRatio * cHeight;
+          let gY = (self.gravity.y / self.dimensions.pHeight) * self.dimensions.aspectRatio * cWidth;
           let cX =  gX - (0.5 * cWidth);
           let cY = gY + (0.5 * cHeight);
           console.log(`gX: ${gX}, gY: ${gY}, cX: ${cX}, cY: ${cY}, cWidth: ${cWidth}, cHeight: ${cHeight}`);
@@ -90,6 +118,7 @@
         }
       }
     }
+    */
 
     /*
     function calculateValues () {
