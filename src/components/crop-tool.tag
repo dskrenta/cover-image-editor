@@ -70,6 +70,47 @@
 
     function calculateValues () {
       for (let i = 0; i < self.partnerCrops.length; i++) {
+        if (self.dimensions.aspectRatio > 1) {
+          // width is larger, resize by height
+          let cHeight = self.partnerCrops[i].height;
+          let cWidth = self.dimensions.aspectRatio * cHeight;
+          // convert x,y to new image size using cWidth and cHeight
+          // calculate cX and cY from x and y
+          console.log(cWidth, cHeight);
+        } else {
+          // height is larger, resize by width
+          let cWidth = self.partnerCrops[i].width;
+          let cHeight = cWidth / self.dimensions.aspectRatio;
+        }
+      }
+    }
+
+    /*
+    function calculateValues () {
+      for (let i = 0; i < self.partnerCrops.length; i++) {
+        let aspectRatio = self.partnerCrops[i].width / self.partnerCrops[i].height;
+        let largestLength = self.dimensions.aspectRatio > 1 ? self.dimensions.height : self.dimensions.width;
+        let cWidth = 0;
+        let cHeight = 0;
+        if (aspectRatio > 1) {
+          cWidth = largestLength;
+          cHeight = cWidth / aspectRatio;
+        } else {
+          cHeight = largestLength;
+          cWidth = aspectRatio * cHeight;
+        }
+        let cX =  self.gravity.x - (0.5 * cWidth);
+        let cY = self.dimensions.height - (self.gravity.y + (0.5 * cHeight));
+        const cropSpec = `-cp${Math.floor(cX)}x${Math.floor(cY)}x${Math.floor(cWidth)}x${Math.floor(cHeight)}`;
+        console.log(`x: ${self.gravity.x}, y: ${self.gravity.y}, cX: ${cX}, cY: ${cY}, cWidth: ${cWidth}, cHeight: ${cHeight}`);
+        console.log(`http:\/\/proxy.topixcdn.com/ipicimg/${self.id}${cropSpec}-fill${self.partnerCrops[i].width}x${self.partnerCrops[i].height}x`);
+      }
+    }
+    */
+
+    /*
+    function calculateValues () {
+      for (let i = 0; i < self.partnerCrops.length; i++) {
         let aspectRatio = self.partnerCrops[i].width / self.partnerCrops[i].height;
         let cWidth = 0;
         let cHeight = 0;
@@ -84,10 +125,12 @@
         }
         let cX =  self.gravity.x - (0.5 * cWidth);
         let cY = self.gravity.y + (0.5 * cHeight);
+        const cropSpec = `-cp${Math.floor(cX)}x${Math.floor(cY)}x${Math.floor(cWidth)}x${Math.floor(cHeight)}`;
         console.log(`cX: ${cX}, cY: ${cY}, cWidth: ${cWidth}, cHeight: ${cHeight}`);
-        console.log(`http:\/\/proxy.topixcdn.com/ipicimg/${self.id}-cp${cX}x${cY}x${cWidth}x${cHeight}-fill${self.partnerCrops[i].width}x${self.partnerCrops[i].height}x`);
+        console.log(`http:\/\/proxy.topixcdn.com/ipicimg/${self.id}${cropSpec}`);
       }
     }
+    */
 
     /*
     function calculateValues () {
