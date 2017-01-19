@@ -77,23 +77,36 @@
         let largestSize = aspectRatio > 1 ? self.crops[i].width : self.crops[i].height;
         let resizeWidth = 0;
         let resizeHeight = 0;
+        let param = '';
 
         if (self.dimensions.aspectRatio > 1) {
           resizeHeight = largestSize;
           resizeWidth = self.dimensions.aspectRatio * resizeHeight;
+          param = 'rszh';
         } else {
           resizeWidth = largestSize;
           resizeHeight = resizeWidth / self.dimensions.aspectRatio;
+          param = 'rszw';
         }
 
         let gX = (self.gravity.x / self.dimensions.pWidth) * resizeWidth;
         let gY = (self.gravity.y / self.dimensions.pHeight) * resizeHeight;
 
-        // let cX =
-        // let cY = 
+        let cX = gX - (0.5 * self.crops[i].width);
+        let cY = gY - (0.5 * self.crops[i].height);
+
+        if (cX < 0) cX = 0;
+        if (cY < 0) cY = 0;
+
+        let calculatedFinalWidth = cX + self.crops[i].width;
+        let calculatedFinalHeight = cY + self.crops[i].height;
+
+        if (calculatedFinalWidth > resizeWidth) cX = resizeWidth - self.crops[i].width;
+        if (calculatedFinalHeight > resizeHeight) cY = resizeHeight - self.crops[i].height;
 
         // console.log(`Needed: ${self.crops[i].width} ${self.crops[i].height}, Actual: ${resizeWidth} ${resizeHeight}`);
-        console.log(gX, gY);
+        console.log(gX, gY, cX, cY);
+        console.log(`http:\/\/proxy.topixcdn.com/ipicimg/${self.id}-${param}${largestSize}-cp${cX}x${cY}x${self.crops[i].width}x${self.crops[i].height}`);
       }
     }
 
