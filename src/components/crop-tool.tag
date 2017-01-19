@@ -34,10 +34,10 @@
   <script>
     const self = this;
     this.id = 'B5772M9IEU0AA67R';
-    this.partnerCrops = [
-      {width: 500, height: 500},
-      {width: 400, height: 500},
-      {width: 500, height: 700}
+    this.crops = [
+      {width: 200, height: 200},
+      {width: 200, height: 300},
+      {width: 400, height: 200}
     ];
 
     this.on('mount', () => {
@@ -60,20 +60,69 @@
       let y = event.clientY;
       self.indicator.style.left = x;
       self.indicator.style.top = y;
+      /*
       self.gravity = {
         x: (x / self.dimensions.pWidth) * self.dimensions.width,
         y: (y / self.dimensions.pHeight) * self.dimensions.height,
         scale: 1
       };
+      */
+      self.gravity = {x: x, y: y};
       calculateValues();
     }
 
     function calculateValues () {
+      for (let i = 0; i < self.crops.length; i++) {
+        let aspectRatio = self.crops[i].width / self.crops[i].height;
+        let largestSize = aspectRatio > 1 ? self.crops[i].width : self.crops[i].height;
+        let resizeWidth = 0;
+        let resizeHeight = 0;
+
+        if (self.dimensions.aspectRatio > 1) {
+          resizeHeight = largestSize;
+          resizeWidth = self.dimensions.aspectRatio * resizeHeight;
+        } else {
+          resizeWidth = largestSize;
+          resizeHeight = resizeWidth / self.dimensions.aspectRatio;
+        }
+
+        let gX = (self.gravity.x / self.dimensions.pWidth) * resizeWidth;
+        let gY = (self.gravity.y / self.dimensions.pHeight) * resizeHeight;
+
+        // let cX =
+        // let cY = 
+
+        // console.log(`Needed: ${self.crops[i].width} ${self.crops[i].height}, Actual: ${resizeWidth} ${resizeHeight}`);
+        console.log(gX, gY);
+      }
+    }
+
+    /*
+    function calculateValues () {
       for (let i = 0; i < self.partnerCrops.length; i++) {
         if (self.dimensions.aspectRatio > 1) {
           // width is larger, resize by height
+          let resizeHeight = self.partnerCrops[i].height;
+          let resizeWidth = self.dimensions.aspectRatio * resizeHeight;
           let cHeight = self.partnerCrops[i].height;
-          let cWidth = self.dimensions.aspectRatio * cHeight;
+          let cWidth = self.partnerCrops[i].width;
+          let gX = (self.gravity.x / self.dimensions.pWidth) * resizeWidth;
+          let gY = (self.gravity.y / self.dimensions.pHeight) * resizeHeight;
+          let cX =  gX - (0.5 * cWidth);
+          cX = cX > 0 ? cX : 0;
+
+          let calculatedCropWidth = cX + cWidth;
+          console.log(`calculatedWidthCOG: ${calculatedCropWidth}, resizeWidth: ${resizeWidth}, cWidth: ${cWidth}`);
+          if (calculatedCropWidth > resizeWidth) {
+            console.log('triggered');
+            cX = resizeWidth - cWidth;
+          }
+
+
+          // let cY = cHeight - (gY + (0.5 * cHeight));
+          let cY = 0;
+          console.log(`x: ${gX}, y: ${gY}, cX: ${cX}, cY: ${cY}, cWidth: ${cWidth}, cHeight: ${cHeight}`);
+          console.log(`http:\/\/proxy.topixcdn.com/ipicimg/${self.id}-rszh${resizeHeight}-cp${cX}x${cY}x${cWidth}x${cHeight}`);
           // convert x,y to new image size using cWidth and cHeight
           // calculate cX and cY from x and y
           console.log(cWidth, cHeight);
@@ -84,6 +133,7 @@
         }
       }
     }
+    */
 
     /*
     function calculateValues () {
