@@ -4,12 +4,6 @@
     <span id="indicator">X</span>
   </div>
 
-  <!--
-  <virtual each={partnerCrops}>
-    <p>Width: {width}, Height: {height}</p>
-  </virtual>
-  -->
-
   <style>
     .container {
       position: relative;
@@ -37,7 +31,7 @@
     this.crops = [
       {width: 200, height: 200},
       {width: 200, height: 300},
-      {width: 400, height: 200}
+      {width: 300, height: 200}
     ];
 
     this.on('mount', () => {
@@ -52,7 +46,6 @@
         pHeight: event.path[0].clientHeight
       };
       self.dimensions.aspectRatio = self.dimensions.width / self.dimensions.height;
-      console.log(self.dimensions.width, self.dimensions.height);
     }
 
     insert (event) {
@@ -60,13 +53,6 @@
       let y = event.clientY;
       self.indicator.style.left = x;
       self.indicator.style.top = y;
-      /*
-      self.gravity = {
-        x: (x / self.dimensions.pWidth) * self.dimensions.width,
-        y: (y / self.dimensions.pHeight) * self.dimensions.height,
-        scale: 1
-      };
-      */
       self.gravity = {x: x, y: y};
       calculateValues();
     }
@@ -75,6 +61,8 @@
       for (let i = 0; i < self.crops.length; i++) {
         let aspectRatio = self.crops[i].width / self.crops[i].height;
         let largestSize = aspectRatio > 1 ? self.crops[i].width : self.crops[i].height;
+        let cWidth = self.crops[i].width;
+        let cHeight = self.crops[i].height;
         let resizeWidth = 0;
         let resizeHeight = 0;
         let param = '';
@@ -92,6 +80,23 @@
         let gX = (self.gravity.x / self.dimensions.pWidth) * resizeWidth;
         let gY = (self.gravity.y / self.dimensions.pHeight) * resizeHeight;
 
+        let gXMin = 0.5 * cWidth;
+        let gXMax = resizeWidth - gXMin;
+        let gYMin = 0.5 * cHeight;
+        let gYMax = resizeHeight - gYMin;
+
+        if (gX > gXMax) gX = gXMax;
+        else if (gX < gXMin) gX = gXMin;
+        if (gY > gYMax) gY = gYMax;
+        else if (gY < gYMin) gY = gYMin;
+
+        let cX = gX - (0.5 * cWidth);
+        let cY = gY - (0.5 * cHeight);
+
+        let calculatedFinalWidth = cX + cWidth;
+        let calculatedFinalHeight = cY + cHeight;
+
+        /*
         let cX = gX - (0.5 * self.crops[i].width);
         let cY = gY - (0.5 * self.crops[i].height);
 
@@ -103,9 +108,11 @@
 
         if (calculatedFinalWidth > resizeWidth) cX = resizeWidth - self.crops[i].width;
         if (calculatedFinalHeight > resizeHeight) cY = resizeHeight - self.crops[i].height;
+        */
 
         // console.log(`Needed: ${self.crops[i].width} ${self.crops[i].height}, Actual: ${resizeWidth} ${resizeHeight}`);
-        console.log(gX, gY, cX, cY);
+        console.log(resizeWidth, resizeHeight);
+        console.log(cWidth, cHeight);
         console.log(`http:\/\/proxy.topixcdn.com/ipicimg/${self.id}-${param}${largestSize}-cp${cX}x${cY}x${self.crops[i].width}x${self.crops[i].height}`);
       }
     }
