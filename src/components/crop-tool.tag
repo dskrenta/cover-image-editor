@@ -29,9 +29,9 @@
     const self = this;
     this.id = 'B5772M9IEU0AA67R';
     this.crops = [
-      {width: 500, height: 400},
-      {width: 400, height: 500},
-      {width: 400, height: 400}
+      {width: 400, height: 300},
+      {width: 300, height: 400},
+      {width: 300, height: 300}
     ];
 
     this.on('mount', () => {
@@ -61,8 +61,8 @@
       for (let i = 0; i < self.crops.length; i++) {
         const aspectRatio = self.crops[i].width / self.crops[i].height;
         const largestSize = aspectRatio > 1 ? self.crops[i].width : self.crops[i].height;
-        const cWidth = self.crops[i].width;
-        const cHeight = self.crops[i].height;
+        let cWidth = self.crops[i].width;
+        let cHeight = self.crops[i].height;
         let resizeWidth = 0;
         let resizeHeight = 0;
         let param = '';
@@ -86,7 +86,7 @@
         if (cX < 0 ) {
           cX = 0;
         } else if (cX > (resizeWidth - cWidth)) {
-          cX = resizeWidth - cWidth;
+          cX = Math.round(resizeWidth - cWidth);
         }
 
         if (cY < 0) {
@@ -95,6 +95,10 @@
           cY = resizeHeight - cHeight;
         }
 
+        cWidth += cX;
+        cHeight += cY;
+
+        console.log(resizeWidth, resizeHeight);
         console.log(`http:\/\/proxy.topixcdn.com/ipicimg/${self.id}-${param}${largestSize}-cp${cX}x${cY}x${cWidth}x${cHeight}`);
       }
     }
