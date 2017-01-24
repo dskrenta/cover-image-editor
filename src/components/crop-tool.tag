@@ -80,6 +80,7 @@
         let gX = (self.gravity.x / self.dimensions.pWidth) * resizeWidth;
         let gY = (self.gravity.y / self.dimensions.pHeight) * resizeHeight;
 
+        /*
         let gXMin = 0.5 * cWidth;
         let gXMax = resizeWidth - gXMin;
         let gYMin = 0.5 * cHeight;
@@ -89,9 +90,20 @@
         else if (gX < gXMin) gX = gXMin;
         if (gY > gYMax) gY = gYMax;
         else if (gY < gYMin) gY = gYMin;
+        */
 
         let cX = gX - (0.5 * cWidth);
         let cY = gY - (0.5 * cHeight);
+
+        let cXMin = 0;
+        let cXMax = resizeWidth - cWidth;
+        let cYMin = 0;
+        let cYMax = resizeHeight - cHeight;
+
+        if (cX < cXMin) cX = cXMin;
+        if (cX > cXMax) cX = cXMax;
+        if (cY < cYMin) cY = cYMin;
+        if (cY > cYMax) cY = cYMax;
 
         let calculatedFinalWidth = cX + cWidth;
         let calculatedFinalHeight = cY + cHeight;
@@ -110,10 +122,17 @@
         if (calculatedFinalHeight > resizeHeight) cY = resizeHeight - self.crops[i].height;
         */
 
+        if (calculatedFinalWidth > cWidth) cX = cX = (calculatedFinalWidth - cWidth);
+        if (calculatedFinalHeight > cHeight) cY = cY = (calculatedFinalHeight - cHeight);
+
+        if (calculatedFinalWidth > cWidth) console.log('calc width over max');
+        if (calculatedFinalHeight > cHeight) console.log('calc height over max');
+
         // console.log(`Needed: ${self.crops[i].width} ${self.crops[i].height}, Actual: ${resizeWidth} ${resizeHeight}`);
-        console.log(resizeWidth, resizeHeight);
-        console.log(cWidth, cHeight);
-        console.log(`http:\/\/proxy.topixcdn.com/ipicimg/${self.id}-${param}${largestSize}-cp${cX}x${cY}x${self.crops[i].width}x${self.crops[i].height}`);
+        // console.log(resizeWidth, resizeHeight);
+        // console.log(cWidth, cHeight);
+        console.log(calculatedFinalWidth, cWidth, calculatedFinalHeight, cHeight);
+        console.log(`http:\/\/proxy.topixcdn.com/ipicimg/${self.id}-${param}${largestSize}-cp${cX}x${cY}x${cWidth}x${cHeight}`);
       }
     }
 
