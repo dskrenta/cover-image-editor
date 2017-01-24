@@ -29,9 +29,9 @@
     const self = this;
     this.id = 'B5772M9IEU0AA67R';
     this.crops = [
-      {width: 200, height: 200},
-      {width: 200, height: 300},
-      {width: 300, height: 200}
+      {width: 500, height: 400},
+      {width: 400, height: 500},
+      {width: 400, height: 400}
     ];
 
     this.on('mount', () => {
@@ -54,7 +54,49 @@
       self.indicator.style.left = x;
       self.indicator.style.top = y;
       self.gravity = {x: x, y: y};
-      calculateValues();
+      calculateValues2();
+    }
+
+    function calculateValues2 () {
+      for (let i = 0; i < self.crops.length; i++) {
+        const aspectRatio = self.crops[i].width / self.crops[i].height;
+        const largestSize = aspectRatio > 1 ? self.crops[i].width : self.crops[i].height;
+        const cWidth = self.crops[i].width;
+        const cHeight = self.crops[i].height;
+        let resizeWidth = 0;
+        let resizeHeight = 0;
+        let param = '';
+
+        if (self.dimensions.aspectRatio > 1) {
+          resizeHeight = largestSize;
+          resizeWidth = self.dimensions.aspectRatio * resizeHeight;
+          param = 'rszh';
+        } else {
+          resizeWidth = largestSize;
+          resizeHeight = resizeWidth / self.dimensions.aspectRatio;
+          param = 'rszw';
+        }
+
+        let gX = Math.round((self.gravity.x / self.dimensions.pWidth) * resizeWidth);
+        let gY = Math.round((self.gravity.y / self.dimensions.pHeight) * resizeHeight);
+
+        let cX = gX - (0.5 * cWidth);
+        let cY = gY - (0.5 * cHeight);
+
+        if (cX < 0 ) {
+          cX = 0;
+        } else if (cX > (resizeWidth - cWidth)) {
+          cX = resizeWidth - cWidth;
+        }
+
+        if (cY < 0) {
+          cY = 0;
+        } else if (cY > (resizeHeight - cHeight)) {
+          cY = resizeHeight - cHeight;
+        }
+
+        console.log(`http:\/\/proxy.topixcdn.com/ipicimg/${self.id}-${param}${largestSize}-cp${cX}x${cY}x${cWidth}x${cHeight}`);
+      }
     }
 
     function calculateValues () {
