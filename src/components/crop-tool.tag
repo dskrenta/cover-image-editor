@@ -53,14 +53,14 @@
       let y = event.clientY;
       self.indicator.style.left = x;
       self.indicator.style.top = y;
-      self.gravity = {x: x, y: y};
+      self.gravity = {x: x, y: y, scale: 1.5};
       calculateValues2();
     }
 
     function calculateValues2 () {
       for (let i = 0; i < self.crops.length; i++) {
         const aspectRatio = self.crops[i].width / self.crops[i].height;
-        const largestSize = aspectRatio > 1 ? self.crops[i].width : self.crops[i].height;
+        let largestSize = aspectRatio > 1 ? self.crops[i].width : self.crops[i].height;
         let cWidth = self.crops[i].width;
         let cHeight = self.crops[i].height;
         let resizeWidth = 0;
@@ -94,6 +94,10 @@
         } else if (cY > (resizeHeight - cHeight)) {
           cY = resizeHeight - cHeight;
         }
+
+        cX = Math.round(cX * self.gravity.scale);
+        cY = Math.round(cY * self.gravity.scale);
+        largestSize = Math.round(largestSize * self.gravity.scale);
 
         cWidth += cX;
         cHeight += cY;
