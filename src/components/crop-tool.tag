@@ -113,8 +113,6 @@
         const cropSpec = `${param}${largestSize}-cp${cX}x${cY}x${cWidth}x${cHeight}`;
         const imgUrl = `http:\/\/proxy.topixcdn.com/ipicimg/${self.id}-${cropSpec}`;
         finalCrops.push(cropSpec);
-
-        console.log(imgUrl);
       }
       opts.cb(finalCrops);
     }
