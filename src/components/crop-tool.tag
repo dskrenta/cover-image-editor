@@ -3,8 +3,12 @@
     <img id="image" class="preview" onclick={insert} onload={dimensions} src="http://proxy.topixcdn.com/ipicimg/{id}" />
     <span id="indicator">X</span>
   </div>
-  <input type="range" value="100" max="300" min="100" onchange={scale}></input>
+  <input type="range" value="100" max="500" min="100" onchange={scale}></input>
   <label>{gravity.scale}</label>
+  <p></p>
+  <virtual each={imgUrl, i in previewCrops}>
+    <img src={imgUrl} height="200px"/>
+  </virtual>
 
   <style>
     .container {
@@ -33,6 +37,7 @@
     this.id = opts.id;
     this.crops = opts.crops;
     this.gravity = {x: 0, y: 0, scale: 1.0};
+    this.previewCrops = [];
 
     this.on('mount', () => {
       self.indicator = document.getElementById('indicator');
@@ -64,6 +69,7 @@
     }
 
     function calculateValues () {
+      self.previewCrops.splice(0);
       let finalCrops = [];
       for (let i = 0; i < self.crops.length; i++) {
         const aspectRatio = self.crops[i].width / self.crops[i].height;
@@ -113,8 +119,7 @@
         const cropSpec = `${param}${largestSize}-cp${cX}x${cY}x${cWidth}x${cHeight}`;
         const imgUrl = `http:\/\/proxy.topixcdn.com/ipicimg/${self.id}-${cropSpec}`;
         finalCrops.push(cropSpec);
-
-        console.log(imgUrl);
+        self.previewCrops.push(imgUrl);
       }
       opts.cb(finalCrops);
     }
