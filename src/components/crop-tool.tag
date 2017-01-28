@@ -3,15 +3,17 @@
     <img id="image" class="preview" onclick={insert} onload={dimensions} src="http://proxy.topixcdn.com/ipicimg/{id}" />
     <span id="indicator">X</span>
   </div>
+  <input type="range" value="100" max="300" min="100" onchange={scale}></input>
 
   <style>
     .container {
       position: relative;
+      height: 300px;
     }
 
     .preview {
       position: absolute;
-      width: 400px;
+      height: 300px;
     }
 
     span {
@@ -27,12 +29,9 @@
 
   <script>
     const self = this;
-    this.id = 'B5772M9IEU0AA67R';
-    this.crops = [
-      {width: 400, height: 300},
-      {width: 300, height: 400},
-      {width: 300, height: 300}
-    ];
+    this.id = opts.id;
+    this.crops = opts.crops;
+    this.gravity = {x: 0, y: 0, scale: 1.0};
 
     this.on('mount', () => {
       self.indicator = document.getElementById('indicator');
@@ -53,11 +52,18 @@
       let y = event.clientY;
       self.indicator.style.left = x;
       self.indicator.style.top = y;
-      self.gravity = {x: x, y: y, scale: 1.0};
+      self.gravity.x = x;
+      self.gravity.y = y;
+      calculateValues();
+    }
+
+    scale (event) {
+      self.gravity.scale = event.target.value / 100;
       calculateValues();
     }
 
     function calculateValues () {
+      let finalCrops = [];
       for (let i = 0; i < self.crops.length; i++) {
         const aspectRatio = self.crops[i].width / self.crops[i].height;
         let largestSize = aspectRatio > 1 ? self.crops[i].width : self.crops[i].height;
@@ -102,9 +108,13 @@
         cWidth += cX;
         cHeight += cY;
 
-        console.log(resizeWidth, resizeHeight);
-        console.log(`http:\/\/proxy.topixcdn.com/ipicimg/${self.id}-${param}${largestSize}-cp${cX}x${cY}x${cWidth}x${cHeight}`);
+        const cropSpec = `${param}${largestSize}-cp${cX}x${cY}x${cWidth}x${cHeight}`;
+        const imgUrl = `http:\/\/proxy.topixcdn.com/ipicimg/${self.id}-${cropSpec}`;
+        finalCrops.push(cropSpec);
+
+        console.log(imgUrl);
       }
+      opts.cb(finalCrops);
     }
   </script>
 </crop-tool>
