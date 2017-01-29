@@ -108,7 +108,7 @@
         if (cY < 0) {
           cY = 0;
         } else if (cY > (resizeHeight - cHeight)) {
-          cY = resizeHeight - cHeight;
+          cY = Math.round(resizeHeight - cHeight);
         }
 
         largestSize = Math.round(largestSize * self.gravity.scale);
