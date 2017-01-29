@@ -56,8 +56,8 @@
     insert (event) {
       let x = event.clientX;
       let y = event.clientY;
-      self.indicator.style.left = x;
-      self.indicator.style.top = y;
+      self.indicator.style.left = (x - 7);
+      self.indicator.style.top = (y - 8);
       self.gravity.x = x;
       self.gravity.y = y;
       calculateValues();
