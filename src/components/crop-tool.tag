@@ -10,12 +10,7 @@
     </virtual>
   </p>
 
-  <style scoped>
-    :scope {
-      display: block;
-      margin: 0px;
-    }
-
+  <style>
     #scale {
       margin: 0px;
     }
