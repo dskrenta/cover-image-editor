@@ -3,17 +3,27 @@
     <img id="image" onclick={insert} onload={dimensions} src="http://proxy.topixcdn.com/ipicimg/{id}" />
     <span id="indicator" onclick={insert}>X</span>
   </div>
-  <input type="range" value="100" max="500" min="100" onchange={scale}></input>
-  <label>{gravity.scale}</label>
-  <p></p>
-  <virtual each={imgUrl, i in previewCrops}>
-    <img src={imgUrl} height="200px"/>
-  </virtual>
+  <input id="scale" type="range" value="100" max="500" min="100" onchange={scale}></input>
+  <p show={dev}>
+    <virtual each={imgUrl, i in previewCrops}>
+      <img src={imgUrl} height="200px"/>
+    </virtual>
+  </p>
 
-  <style>
+  <style scoped>
+    :scope {
+      display: block;
+      margin: 0px;
+    }
+
+    #scale {
+      margin: 0px;
+    }
+
     #container {
       position: relative;
       height: 300px;
+      padding-bottom: 5px;
     }
 
     #image {
@@ -36,12 +46,14 @@
     const self = this;
     this.id = opts.id;
     this.crops = opts.crops;
+    this.dev = opts.dev;
     this.gravity = {x: 0, y: 0, scale: 1.0};
     this.previewCrops = [];
 
     this.on('mount', () => {
       self.indicator = document.getElementById('indicator');
       self.container = document.getElementById('container');
+      self.scale = document.getElementById('scale');
     });
 
     dimensions (event) {
@@ -52,6 +64,7 @@
         pHeight: event.path[0].clientHeight
       };
       self.dimensions.aspectRatio = self.dimensions.width / self.dimensions.height;
+      self.scale.style.width = self.dimensions.pWidth;
     }
 
     insert (event) {
@@ -122,7 +135,7 @@
         const cropSpec = `${param}${largestSize}-cp${cX}x${cY}x${cWidth}x${cHeight}`;
         const imgUrl = `http:\/\/proxy.topixcdn.com/ipicimg/${self.id}-${cropSpec}`;
         finalCrops.push(cropSpec);
-        self.previewCrops.push(imgUrl);
+        if (self.dev) self.previewCrops.push(imgUrl);
       }
       opts.cb(finalCrops);
     }
