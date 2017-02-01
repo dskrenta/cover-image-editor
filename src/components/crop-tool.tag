@@ -1,7 +1,7 @@
 <crop-tool>
-  <div class="container">
-    <img id="image" class="preview" onclick={insert} onload={dimensions} src="http://proxy.topixcdn.com/ipicimg/{id}" />
-    <span id="indicator">X</span>
+  <div id="container">
+    <img id="image" onclick={insert} onload={dimensions} src="http://proxy.topixcdn.com/ipicimg/{id}" />
+    <span id="indicator" onclick={insert}>X</span>
   </div>
   <input type="range" value="100" max="500" min="100" onchange={scale}></input>
   <label>{gravity.scale}</label>
@@ -11,17 +11,17 @@
   </virtual>
 
   <style>
-    .container {
+    #container {
       position: relative;
       height: 300px;
     }
 
-    .preview {
+    #image {
       position: absolute;
       height: 300px;
     }
 
-    span {
+    #indicator {
       top: 90px;
       left: 90px;
       position: relative;
@@ -41,6 +41,7 @@
 
     this.on('mount', () => {
       self.indicator = document.getElementById('indicator');
+      self.container = document.getElementById('container');
     });
 
     dimensions (event) {
@@ -54,12 +55,14 @@
     }
 
     insert (event) {
-      let x = event.clientX;
-      let y = event.clientY;
-      self.indicator.style.left = (x - 7);
-      self.indicator.style.top = (y - 8);
-      self.gravity.x = x;
-      self.gravity.y = y;
+      self.gravity.x = event.clientX;
+      self.gravity.y = event.clientY;
+      const containerPos = getPosition(self.container);
+      const indicatorPos = getPosition(self.indicator);
+
+      self.indicator.style.left = self.gravity.x - containerPos.x - (indicatorPos.width / 2);
+      self.indicator.style.top = self.gravity.y - containerPos.y - (indicatorPos.height / 2);
+
       calculateValues();
     }
 
@@ -122,6 +125,16 @@
         self.previewCrops.push(imgUrl);
       }
       opts.cb(finalCrops);
+    }
+
+    function getPosition (element) {
+      const rect = element.getBoundingClientRect();
+      return {
+        x: rect.left,
+        y: rect.top,
+        width: rect.width,
+        height: rect.height
+      };
     }
   </script>
 </crop-tool>
