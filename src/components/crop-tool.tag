@@ -41,7 +41,7 @@
     const self = this;
     this.id = opts.id;
     this.crops = opts.crops;
-    this.dev = opts.dev;
+    this.dev = opts.dev || false;
     this.gravity = {x: 0, y: 0, scale: 1.0};
     this.previewCrops = [];
 
