@@ -140,7 +140,7 @@
         y: Math.round((cY / pHeight) * self.dimensions.height),
         width: Math.round((cWidth / pWidth) * self.dimensions.width),
         height: Math.round((cHeight / pHeight) * self.dimensions.height)
-      }
+      };
     }
 
     function getPosition (element) {
