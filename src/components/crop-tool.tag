@@ -65,7 +65,7 @@
     insert (event) {
       const containerPos = getPosition(self.container);
       const indicatorPos = getPosition(self.indicator);
-      
+
       self.gravity.x = event.clientX - containerPos.x;
       self.gravity.y = event.clientY - containerPos.y;
 
@@ -95,11 +95,9 @@
         if (self.dimensions.aspectRatio > 1) {
           resizeHeight = largestSize;
           resizeWidth = self.dimensions.aspectRatio * resizeHeight;
-          param = 'rszh';
         } else {
           resizeWidth = largestSize;
           resizeHeight = resizeWidth / self.dimensions.aspectRatio;
-          param = 'rszw';
         }
 
         let gX = Math.round((self.gravity.x / self.dimensions.pWidth) * resizeWidth);
@@ -123,17 +121,26 @@
           cY = Math.round(resizeHeight - cHeight);
         }
 
-        largestSize = Math.round(largestSize * self.gravity.scale);
-
         cWidth += cX;
         cHeight += cY;
 
-        const cropSpec = `${param}${largestSize}-cp${cX}x${cY}x${cWidth}x${cHeight}`;
+        const scale = scalePosition(resizeWidth, resizeHeight, cX, cY, cWidth, cHeight);
+        const cropSpec = `cp${scale.x}x${scale.y}x${scale.width}x${scale.height}`;
         const imgUrl = `http:\/\/proxy.topixcdn.com/ipicimg/${self.id}-${cropSpec}`;
+
         finalCrops.push(cropSpec);
         if (self.dev) self.previewCrops.push(imgUrl);
       }
       opts.cb(finalCrops);
+    }
+
+    function scalePosition (pWidth, pHeight, cX, cY, cWidth, cHeight) {
+      return {
+        x: Math.round((cX / pWidth) * self.dimensions.width),
+        y: Math.round((cY / pHeight) * self.dimensions.height),
+        width: Math.round((cWidth / pWidth) * self.dimensions.width),
+        height: Math.round((cHeight / pHeight) * self.dimensions.height)
+      }
     }
 
     function getPosition (element) {
