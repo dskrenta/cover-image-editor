@@ -58,6 +58,7 @@
         pWidth: event.path[0].clientWidth,
         pHeight: event.path[0].clientHeight
       };
+
       self.dimensions.aspectRatio = self.dimensions.width / self.dimensions.height;
       self.scale.style.width = self.dimensions.pWidth;
     }
@@ -83,14 +84,14 @@
     function calculateValues () {
       self.previewCrops.splice(0);
       let finalCrops = [];
-      for (let i = 0; i < self.crops.length; i++) {
-        const aspectRatio = self.crops[i].width / self.crops[i].height;
-        let largestSize = aspectRatio > 1 ? self.crops[i].width : self.crops[i].height;
-        let cWidth = self.crops[i].width;
-        let cHeight = self.crops[i].height;
+
+      for (crop in self.crops) {
+        const aspectRatio = self.crops[crop].width / self.crops[crop].height;
+        let largestSize = aspectRatio > 1 ? self.crops[crop].width : self.crops[crop].height;
+        let cWidth = self.crops[crop].width;
+        let cHeight = self.crops[crop].height;
         let resizeWidth = 0;
         let resizeHeight = 0;
-        let param = '';
 
         if (self.dimensions.aspectRatio > 1) {
           resizeHeight = largestSize;
