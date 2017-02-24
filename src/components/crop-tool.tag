@@ -63,13 +63,14 @@
     }
 
     insert (event) {
-      self.gravity.x = event.clientX;
-      self.gravity.y = event.clientY;
       const containerPos = getPosition(self.container);
       const indicatorPos = getPosition(self.indicator);
+      
+      self.gravity.x = event.clientX - containerPos.x;
+      self.gravity.y = event.clientY - containerPos.y;
 
-      self.indicator.style.left = self.gravity.x - containerPos.x - (indicatorPos.width / 2);
-      self.indicator.style.top = self.gravity.y - containerPos.y - (indicatorPos.height / 2);
+      self.indicator.style.left = event.clientX - containerPos.x - (indicatorPos.width / 2);
+      self.indicator.style.top = event.clientY - containerPos.y - (indicatorPos.height / 2);
 
       calculateValues();
     }
