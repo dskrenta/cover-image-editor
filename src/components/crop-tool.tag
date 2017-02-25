@@ -49,7 +49,20 @@
       self.indicator = document.getElementById('indicator');
       self.container = document.getElementById('container');
       self.scale = document.getElementById('scale');
+      self.image = document.getElementById('image');
+      setIndicatorImageCenter();
     });
+
+    function setIndicatorImageCenter () {
+      const imgPos = getPosition(self.image);
+      const containerPos = getPosition(self.container);
+      const centerX = (imgPos.x + containerPos.x) + (imgPos.width / 2);
+      const centerY = (imgPos.y - containerPos.y) + (imgPos.height / 2);
+      self.indicator.style.left = centerX;
+      self.indicator.style.top = centerY;
+      self.gravity.x = centerX;
+      self.gravity.y = centerY;
+    }
 
     dimensions (event) {
       self.dimensions = {
