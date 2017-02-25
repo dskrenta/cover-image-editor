@@ -70,8 +70,8 @@
       self.gravity.x = event.clientX - containerPos.x;
       self.gravity.y = event.clientY - containerPos.y;
 
-      self.indicator.style.left = event.clientX - containerPos.x - (indicatorPos.width / 2);
-      self.indicator.style.top = event.clientY - containerPos.y - (indicatorPos.height / 2);
+      self.indicator.style.left = event.clientX - containerPos.x - (indicatorPos.width / 2) + "px";
+      self.indicator.style.top = event.clientY - containerPos.y - (indicatorPos.height / 2) + "px";
 
       calculateValues();
     }
