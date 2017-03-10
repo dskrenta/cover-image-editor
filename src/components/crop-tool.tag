@@ -83,8 +83,8 @@
       self.gravity.x = event.clientX - containerPos.x;
       self.gravity.y = event.clientY - containerPos.y;
 
-      self.indicator.style.left = event.clientX - containerPos.x - (indicatorPos.width / 2) + "px";
-      self.indicator.style.top = event.clientY - containerPos.y - (indicatorPos.height / 2) + "px";
+      self.indicator.style.left = `${event.clientX - containerPos.x - (indicatorPos.width / 2)}px`;
+      self.indicator.style.top = `${event.clientY - containerPos.y - (indicatorPos.height / 2)}px`;
 
       calculateValues();
     }
@@ -96,11 +96,17 @@
 
     function calculateValues () {
       self.previewCrops.splice(0);
-      let finalCrops = [];
+      const finalCrops = [];
+      let largestSize = 0;
 
       for (crop in self.crops) {
         const aspectRatio = self.crops[crop].width / self.crops[crop].height;
-        let largestSize = aspectRatio > 1 ? self.crops[crop].width : self.crops[crop].height;
+        if (self.dimensions.width < self.crops[crop].width || self.dimensions.height < self.crops[crop].height) {
+          largestSize = aspectRatio > 1 ? self.dimensions.width : self.dimensions.height;
+        } else {
+          largestSize = aspectRatio > 1 ? self.crops[crop].width : self.crops[crop].height;
+        }
+        // let largestSize = aspectRatio > 1 ? self.crops[crop].width : self.crops[crop].height;
         let cWidth = self.crops[crop].width;
         let cHeight = self.crops[crop].height;
         let resizeWidth = 0;
@@ -141,6 +147,8 @@
         const scale = scalePosition(resizeWidth, resizeHeight, cX, cY, cWidth, cHeight);
         const cropSpec = `cp${scale.x}x${scale.y}x${scale.width}x${scale.height}`;
         const imgUrl = `http:\/\/proxy.topixcdn.com/ipicimg/${self.id}-${cropSpec}`;
+
+        // console.log(scale.width - scale.x, scale.height - scale.y);
 
         finalCrops.push(cropSpec);
         if (self.dev) self.previewCrops.push(imgUrl);
