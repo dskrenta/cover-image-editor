@@ -97,18 +97,38 @@
     function calculateValues () {
       self.previewCrops.splice(0);
       const finalCrops = [];
-      let largestSize = 0;
-      let cropLarger = false;
+      // let largestSize = 0;
 
       for (crop in self.crops) {
         const aspectRatio = self.crops[crop].width / self.crops[crop].height;
+        let cWidth = 0;
+        let cHeight = 0;
+        /*
         if (self.dimensions.width < self.crops[crop].width || self.dimensions.height < self.crops[crop].height) {
           largestSize = self.dimensions.width > self.dimensions.height ? self.dimensions.width : self.dimensions.height;
         } else {
           largestSize = aspectRatio > 1 ? self.crops[crop].width : self.crops[crop].height;
         }
-        let cWidth = self.crops[crop].width;
-        let cHeight = self.crops[crop].height;
+        */
+        let largestSize = aspectRatio > 1 ? self.crops[crop].width : self.crops[crop].height;
+        // change these values
+        if (self.dimensions.width < self.crops[crop].width || self.dimensions.height < self.crops[crop].height) {
+          if (self.dimensions.aspectRatio > 1) {
+            console.log(self.dimensions.width, self.dimensions.height);
+            cHeight = self.dimensions.height;
+            cHeight = aspectRatio * cHeight;
+          } else {
+            console.log(self.dimensions.width, self.dimensions.height);
+            cWidth = self.dimensions.width;
+            cHeight = cWidth / aspectRatio;
+          }
+        } else {
+          cWidth = self.crops[crop].width;
+          cHeight = self.crops[crop].height;
+        }
+
+        // let cWidth = self.crops[crop].width;
+        // let cHeight = self.crops[crop].height;
         let resizeWidth = 0;
         let resizeHeight = 0;
 
