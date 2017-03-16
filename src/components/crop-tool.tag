@@ -103,32 +103,44 @@
         const aspectRatio = self.crops[crop].width / self.crops[crop].height;
         let cWidth = 0;
         let cHeight = 0;
-        /*
-        if (self.dimensions.width < self.crops[crop].width || self.dimensions.height < self.crops[crop].height) {
-          largestSize = self.dimensions.width > self.dimensions.height ? self.dimensions.width : self.dimensions.height;
-        } else {
-          largestSize = aspectRatio > 1 ? self.crops[crop].width : self.crops[crop].height;
-        }
-        */
+        let resizeWidth = 0;
+        let resizeHeight = 0;
         let largestSize = aspectRatio > 1 ? self.crops[crop].width : self.crops[crop].height;
-        // change these values
+
         if (self.dimensions.width < self.crops[crop].width || self.dimensions.height < self.crops[crop].height) {
+          // requested crop is larger than base image
           if (self.dimensions.aspectRatio > 1) {
-            console.log(self.dimensions.width, self.dimensions.height);
+            // width > height (base image)
+            // set height to cropAspectRatio equivalent
             cHeight = self.dimensions.height;
-            cHeight = aspectRatio * cHeight;
+            cWidth = aspectRatio * cHeight;
+            resizeWidth = cWidth;
+            resizeHeight = cHeight;
           } else {
-            console.log(self.dimensions.width, self.dimensions.height);
+            // height > width (base image)
+            // set width to cropAspectRatio equivalent
             cWidth = self.dimensions.width;
             cHeight = cWidth / aspectRatio;
+            resizeWidth = cWidth;
+            resizeHeight = cHeight;
           }
         } else {
+          // regular crop
           cWidth = self.crops[crop].width;
           cHeight = self.crops[crop].height;
+
+          if (self.dimensions.aspectRatio > 1) {
+            resizeHeight = largestSize;
+            resizeWidth = self.dimensions.aspectRatio * resizeHeight;
+          } else {
+            resizeWidth = largestSize;
+            resizeHeight = resizeWidth / self.dimensions.aspectRatio;
+          }
         }
 
         // let cWidth = self.crops[crop].width;
         // let cHeight = self.crops[crop].height;
+        /*
         let resizeWidth = 0;
         let resizeHeight = 0;
 
@@ -139,6 +151,7 @@
           resizeWidth = largestSize;
           resizeHeight = resizeWidth / self.dimensions.aspectRatio;
         }
+        */
 
         let gX = Math.round((self.gravity.x / self.dimensions.pWidth) * resizeWidth);
         let gY = Math.round((self.gravity.y / self.dimensions.pHeight) * resizeHeight);
@@ -165,6 +178,7 @@
         cHeight += cY;
 
         const scale = scalePosition(resizeWidth, resizeHeight, cX, cY, cWidth, cHeight);
+        console.log(aspectRatio, scale.width / scale.height);
         const cropSpec = `cp${scale.x}x${scale.y}x${scale.width}x${scale.height}`;
         const imgUrl = `http:\/\/proxy.topixcdn.com/ipicimg/${self.id}-${cropSpec}`;
 
