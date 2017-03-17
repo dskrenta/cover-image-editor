@@ -166,8 +166,10 @@
         cWidth += cX;
         cHeight += cY;
 
+        console.log(`Values: ${resizeWidth} ${resizeHeight} ${cWidth} ${cHeight}`);
+
         const scale = scalePosition(resizeWidth, resizeHeight, cX, cY, cWidth, cHeight);
-        console.log(aspectRatio, scale.width / scale.height);
+        // console.log(aspectRatio, scale.width / scale.height);
         const cropSpec = `cp${scale.x}x${scale.y}x${scale.width}x${scale.height}`;
         const imgUrl = `http:\/\/proxy.topixcdn.com/ipicimg/${self.id}-${cropSpec}`;
 
