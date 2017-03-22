@@ -105,9 +105,9 @@
         let cHeight = 0;
         let resizeWidth = 0;
         let resizeHeight = 0;
-        let largestSize = 0;
+        let largestSize = aspectRatio > 1 ? self.crops[crop].width : self.crops[crop].height;
 
-        if (isSmaller) {
+        // if (isSmaller) {
           resizeWidth = self.dimensions.width;
           resizeHeight = self.dimensions.height;
           let smallestSize = self.dimensions.aspectRatio > 1 ? self.dimensions.height : self.dimensions.width;
@@ -120,7 +120,10 @@
             cWidth = smallestSize;
             cHeight = cWidth / aspectRatio;
           }
-        } else {
+        // }
+        /*
+        else {
+          // console.log('triggered');
           cWidth = self.crops[crop].width;
           cHeight = self.crops[crop].height;
 
@@ -132,6 +135,7 @@
             resizeHeight = resizeWidth / self.dimensions.aspectRatio;
           }
         }
+        */
 
         /*
         if (isSmaller) {
