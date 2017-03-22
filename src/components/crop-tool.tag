@@ -108,6 +108,33 @@
         let largestSize = 0;
 
         if (isSmaller) {
+          resizeWidth = self.dimensions.width;
+          resizeHeight = self.dimensions.height;
+          let smallestSize = self.dimensions.aspectRatio > 1 ? self.dimensions.height : self.dimensions.width;
+          if (aspectRatio > 1) {
+            // width of crop is larger
+            cHeight = smallestSize;
+            cWidth = aspectRatio * cHeight;
+          } else {
+            // height of crop is larger
+            cWidth = smallestSize;
+            cHeight = cWidth / aspectRatio;
+          }
+        } else {
+          cWidth = self.crops[crop].width;
+          cHeight = self.crops[crop].height;
+
+          if (self.dimensions.aspectRatio > 1) {
+            resizeHeight = largestSize;
+            resizeWidth = self.dimensions.aspectRatio * resizeHeight;
+          } else {
+            resizeWidth = largestSize;
+            resizeHeight = resizeWidth / self.dimensions.aspectRatio;
+          }
+        }
+
+        /*
+        if (isSmaller) {
           // largestSize = self.dimensions.aspectRatio > 1 ? self.dimensions.width : self.dimensions.height;
           largestSize = self.dimensions.aspectRatio > 1 ? self.dimensions.height : self.dimensions.width;
         } else {
@@ -141,6 +168,7 @@
             resizeHeight = resizeWidth / self.dimensions.aspectRatio;
           }
         }
+        */
 
         let gX = Math.round((self.gravity.x / self.dimensions.pWidth) * resizeWidth);
         let gY = Math.round((self.gravity.y / self.dimensions.pHeight) * resizeHeight);
