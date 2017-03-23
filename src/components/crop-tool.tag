@@ -106,16 +106,12 @@
         let resizeHeight = self.dimensions.height;
         let smallestSize = self.dimensions.aspectRatio > 1 ? self.dimensions.height : self.dimensions.width;
 
-        // ERROR: when height is larger than width
-
-        if (aspectRatio > 1) {
+        if (self.dimensions.aspectRatio > 1) {
           cHeight = smallestSize;
           cWidth = Math.round(aspectRatio * cHeight);
-          console.log(cWidth, cHeight, aspectRatio);
         } else {
           cWidth = smallestSize;
           cHeight = Math.round(cWidth / aspectRatio);
-          console.log(cWidth, cHeight, aspectRatio);
         }
 
         let gX = Math.round((self.gravity.x / self.dimensions.pWidth) * resizeWidth);
