@@ -137,43 +137,6 @@
         }
         */
 
-        /*
-        if (isSmaller) {
-          // largestSize = self.dimensions.aspectRatio > 1 ? self.dimensions.width : self.dimensions.height;
-          largestSize = self.dimensions.aspectRatio > 1 ? self.dimensions.height : self.dimensions.width;
-        } else {
-          largestSize = aspectRatio > 1 ? self.crops[crop].width : self.crops[crop].height;
-        }
-
-        if (isSmaller) {
-          if (aspectRatio > 1) {
-            resizeHeight = largestSize;
-            resizeWidth = resizeHeight * aspectRatio;
-
-            console.log(resizeWidth, resizeHeight);
-          } else {
-            resizeWidth = largestSize;
-            resizeHeight = resizeWidth / aspectRatio;
-
-            console.log(resizeWidth, resizeHeight);
-          }
-
-          cWidth = resizeWidth;
-          cHeight = resizeHeight;
-        } else {
-          cWidth = self.crops[crop].width;
-          cHeight = self.crops[crop].height;
-
-          if (self.dimensions.aspectRatio > 1) {
-            resizeHeight = largestSize;
-            resizeWidth = self.dimensions.aspectRatio * resizeHeight;
-          } else {
-            resizeWidth = largestSize;
-            resizeHeight = resizeWidth / self.dimensions.aspectRatio;
-          }
-        }
-        */
-
         let gX = Math.round((self.gravity.x / self.dimensions.pWidth) * resizeWidth);
         let gY = Math.round((self.gravity.y / self.dimensions.pHeight) * resizeHeight);
 
@@ -198,10 +161,8 @@
         cWidth += cX;
         cHeight += cY;
 
-        console.log(`Values: ${resizeWidth} ${resizeHeight} ${cWidth} ${cHeight}`);
-
         const scale = scalePosition(resizeWidth, resizeHeight, cX, cY, cWidth, cHeight);
-        // console.log(aspectRatio, scale.width / scale.height);
+        // console.log(aspectRatio, (scale.width - scale.x) / (scale.height - scale.y));
         const cropSpec = `cp${scale.x}x${scale.y}x${scale.width}x${scale.height}`;
         const imgUrl = `http:\/\/proxy.topixcdn.com/ipicimg/${self.id}-${cropSpec}`;
 
