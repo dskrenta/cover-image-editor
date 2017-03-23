@@ -100,42 +100,19 @@
 
       for (crop in self.crops) {
         const aspectRatio = self.crops[crop].width / self.crops[crop].height;
-        const isSmaller = self.dimensions.width < self.crops[crop].width || self.dimensions.height < self.crops[crop].height;
         let cWidth = 0;
         let cHeight = 0;
-        let resizeWidth = 0;
-        let resizeHeight = 0;
-        let largestSize = aspectRatio > 1 ? self.crops[crop].width : self.crops[crop].height;
+        let resizeWidth = self.dimensions.width;
+        let resizeHeight = self.dimensions.height;
+        let smallestSize = self.dimensions.aspectRatio > 1 ? self.dimensions.height : self.dimensions.width;
 
-        // if (isSmaller) {
-          resizeWidth = self.dimensions.width;
-          resizeHeight = self.dimensions.height;
-          let smallestSize = self.dimensions.aspectRatio > 1 ? self.dimensions.height : self.dimensions.width;
-          if (aspectRatio > 1) {
-            // width of crop is larger
-            cHeight = smallestSize;
-            cWidth = aspectRatio * cHeight;
-          } else {
-            // height of crop is larger
-            cWidth = smallestSize;
-            cHeight = cWidth / aspectRatio;
-          }
-        // }
-        /*
-        else {
-          // console.log('triggered');
-          cWidth = self.crops[crop].width;
-          cHeight = self.crops[crop].height;
-
-          if (self.dimensions.aspectRatio > 1) {
-            resizeHeight = largestSize;
-            resizeWidth = self.dimensions.aspectRatio * resizeHeight;
-          } else {
-            resizeWidth = largestSize;
-            resizeHeight = resizeWidth / self.dimensions.aspectRatio;
-          }
+        if (self.dimensions.aspectRatio > 1) {
+          cHeight = smallestSize;
+          cWidth = Math.round(aspectRatio * cHeight);
+        } else {
+          cWidth = smallestSize;
+          cHeight = Math.round(cWidth / aspectRatio);
         }
-        */
 
         let gX = Math.round((self.gravity.x / self.dimensions.pWidth) * resizeWidth);
         let gY = Math.round((self.gravity.y / self.dimensions.pHeight) * resizeHeight);
@@ -162,7 +139,6 @@
         cHeight += cY;
 
         const scale = scalePosition(resizeWidth, resizeHeight, cX, cY, cWidth, cHeight);
-        // console.log(aspectRatio, (scale.width - scale.x) / (scale.height - scale.y));
         const cropSpec = `cp${scale.x}x${scale.y}x${scale.width}x${scale.height}`;
         const imgUrl = `http:\/\/proxy.topixcdn.com/ipicimg/${self.id}-${cropSpec}`;
 
