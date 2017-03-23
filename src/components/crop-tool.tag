@@ -104,13 +104,12 @@
         let cHeight = 0;
         let resizeWidth = self.dimensions.width;
         let resizeHeight = self.dimensions.height;
-        let smallestSize = self.dimensions.aspectRatio > 1 ? self.dimensions.height : self.dimensions.width;
 
         if (self.dimensions.aspectRatio > 1) {
-          cHeight = smallestSize;
+          cHeight = self.dimensions.height;
           cWidth = Math.round(aspectRatio * cHeight);
         } else {
-          cWidth = smallestSize;
+          cWidth = self.dimensions.width;
           cHeight = Math.round(cWidth / aspectRatio);
         }
 
