@@ -108,9 +108,23 @@
         if (self.dimensions.aspectRatio > 1) {
           cHeight = self.dimensions.height;
           cWidth = Math.round(aspectRatio * cHeight);
+
+          // oversize
+          let oversizeScale = cWidth / self.dimensions.width;
+          if (oversizeScale > 1) {
+            cHeight = self.dimensions.height / oversizeScale;
+            cWidth = Math.round(aspectRatio * cHeight);
+          }
         } else {
           cWidth = self.dimensions.width;
           cHeight = Math.round(cWidth / aspectRatio);
+
+          // oversize
+          let oversizeScale = cHeight / self.dimensions.height;
+          if (oversizeScale > 1) {
+            cWidth = self.dimensions.width / oversizeScale;
+            cHeight = Math.round(cWidth / aspectRatio);
+          }
         }
 
         let gX = Math.round((self.gravity.x / self.dimensions.pWidth) * resizeWidth);

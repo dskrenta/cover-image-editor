@@ -16,14 +16,23 @@
     <script src="dist/components.js"></script>
 
     <script>
+      // 2r1: 300x600, 3r2: 800x1200, 4r3: 480x640, 6r5: 500x600, 400r209: 627x1200, square: 500x500
+
       riot.mount('crop-tool', {
-        id: '0P2L72I2NTS2CTV8',
+        // id: '0P2L72I2NTS2CTV8',
         // id: 'EBNDUO76RAQ5GCKH',
         // id: '7O8FUGLUS0PHGRP2',
+        id: 'HHQ4N974JDEAO15R',
         crops: [
-          {width: 1000, height: 1000},
-          {width: 1000, height: 1500},
-          {width: 1500, height: 1000}
+          // {width: 1000, height: 1000},
+          // {width: 1000, height: 1500},
+          // {width: 1500, height: 1000}
+          {width: 600, height: 300},
+          {width: 1200, height: 800},
+          {width: 640, height: 480},
+          {width: 209, height: 400},
+          {width: 1200, height: 627},
+          {width: 500, height: 500},
         ],
         cb: (result) => console.log(result),
         dev: true
